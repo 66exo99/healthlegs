@@ -1,0 +1,44 @@
+function updatePayForm(ids_vals)
+{
+  for(key in ids_vals) {
+    var elem = document.getElementsByName(key);
+    elem[0].value = ids_vals[key];
+  }
+  return false;
+}
+
+/*
+var err_div;
+function checkContractNumber(field_id, page_addr)
+{
+  var elem = document.getElementById(field_id);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', page_addr + elem.value, false);
+  xhr.send();
+
+  if (xhr.readyState == 4 && xhr.status == 200) {
+    var resp = JSON.parse(xhr.responseText);
+    resp = resp.ret;
+
+    if(elem.style.borderColor == 'red') {
+      err_div.parentNode.removeChild(err_div);
+      elem.style.borderColor = '';
+    }
+
+    if(resp === true)
+      return resp;
+    else
+    {
+      elem.style.borderColor = 'red';
+
+      err_div = document.createElement('div');
+      err_div.innerHTML = 'Договора с таким номером не существует';
+      err_div.className = 'pay_err_text';
+      elem.after(err_div);
+
+      return resp;
+    }
+  }
+}
+*/

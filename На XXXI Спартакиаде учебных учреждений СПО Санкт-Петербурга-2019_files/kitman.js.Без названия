@@ -1,0 +1,197 @@
+(function ($) {
+
+
+Drupal.behaviors.kitman = {
+  attach: function(context, settings){
+
+    /*$('#edit-submit').click(function(){
+      var return_status = true;
+      var message = "Заполните обязательные поля: \n";
+      $(this).parent().parent().find('span.form-required').each(function(){
+        var title = $(this).parent().text();
+        var val = $(this).parent().parent().find('select').attr('value');
+        console.log(title);
+        if(val) {
+          console.log('SELECT');
+          console.log(val);
+          if(val == '_none') {
+            return_status = false;
+            message = message + ' -   ' + title + "\n";
+            //alert('Заполните поле: ' + title);
+          }
+        }
+        else {
+          val = $(this).parent().parent().find('input').attr('value');
+          console.log('INPUT');
+          console.log(val);
+          if(val == '') {
+            return_status = false;
+            message = message + ' -   ' + title + "\n";
+            //alert('Заполните поле: ' + title);
+          }
+        }
+      });
+      if(return_status == false) {
+        alert(message);
+      }
+      //return false;
+      return return_status;
+    }); */
+  }
+};
+
+  $(document).ready(function(){
+    $('.collapsable-basic').collapsable();
+    $('.collapsable-toggle').collapsable({
+      fx: 'toggle'
+    });
+    $('.collapsable-slide').collapsable({
+      fx: 'slide',
+      fxDuration: 300
+    });
+
+    $('.filenames').toggle();
+    $('.filenames_toggle').click(function(){
+      $('.filenames').toggle();
+      return false;
+    });
+    $("a[href$='.pdf'], a[href$='.PDF']").attr("target", "_blank");
+    $('a').each(function () {
+      var name_href = $(this).attr('href');
+      var name_new = name_href;
+      var name_find = 'http://www.gukit.ru';
+      var name_replace = 'https://www.gukit.ru';
+      //console.log('itteration '+ name_href);
+      if(typeof name_href === 'string'){
+        if(name_href.indexOf(name_find)!=-1){
+          name_new = name_href.replace(name_find, '');
+          $(this).attr('href', name_new);
+          //console.log('mach');
+          //console.log(name_href);
+          //console.log(name_new);
+        }
+      }
+
+
+    })
+
+    /*function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      var expires = "expires="+d.toUTCString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    } // */
+
+    function setCookie(name, value, expires, path, domain){
+      // set time, it's in milliseconds
+      var today = new Date();
+      today.setTime(today.getTime());
+
+//  if the expires variable is set, make the correct
+//  expires time, the current script below will set
+//  it for x number of days, to make it for hours,
+//  delete * 24, for minutes, delete * 60 * 24
+
+      if (expires)
+      {
+        // expires = expires * 1000 * 60 * 60 * 24;
+        expires = expires * 1000 * 60 * 60;
+      }
+      var expires_date = new Date(today.getTime() + (expires));
+
+      document.cookie = name + "=" +escape(value) +
+        ((expires) ? ";expires=" + expires_date.toGMTString() : "") +
+        ((path) ? ";path=" + path : "") +
+        ((domain) ? ";domain=" + domain : "");
+    }
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      return "";
+    }
+
+    var is_blind_version = getCookie('blind');
+    
+    if(is_blind_version == 1){
+      $('#blind').append('<a href="#" class="toggle_normal"><img src="/sites/all/themes/custom/kitman/images/eye_3_18.png">'+Drupal.t('Normal mode')+'</a>');
+      //var css = document.createElement("style");
+      //css.type = "text/css";
+      //css.src = "/sites/all/themes/custom/kitman/blind.css";
+      //document.getElementsByTagName("head")[0].appendChild(css);
+      var fileref=document.createElement("link");
+      fileref.setAttribute("rel", "stylesheet");
+      fileref.setAttribute("type", "text/css");
+      fileref.setAttribute("href", "/sites/all/themes/custom/kitman/blind.css");
+      document.getElementsByTagName("head")[0].appendChild(fileref);
+    }
+    else {
+      $('#blind').append('<a href="#" class="toggle_blind"><img src="/sites/all/themes/custom/kitman/images/eye_3_18.png">'+Drupal.t('Version for the visually impaired')+'</a>');
+    }
+    $('#blind a.toggle_normal').click(function(){
+      setCookie('blind', 0, 1, '/', 'www.gukit.ru');
+      location.reload();
+    });
+    $('#blind a.toggle_blind').click(function(){
+      setCookie('blind', 1, 1, '/', 'www.gukit.ru');
+      var fileref=document.createElement("link");
+      fileref.setAttribute("rel", "stylesheet");
+      fileref.setAttribute("type", "text/css");
+      fileref.setAttribute("href", "/sites/all/themes/custom/kitman/blind.css");
+      document.getElementsByTagName("head")[0].appendChild(fileref);
+      //location.reload();
+    });
+
+
+  var doc_w = screen.width;
+  //var client_w=document.body.clientWidth;
+  if(doc_w < 420) {
+    $('body').addClass('mobile');
+  }
+
+  $('.podpis').each(function () {
+    alt = $(this).attr('alt');
+    wid = $(this).width();
+    if(wid>300) {
+      $(this).after('<br clear="both">');
+    }
+    //alert(wid);
+    $(this).wrap('<div class="img_podpis_text" style="width:'+wid+'px" />');
+    $(this).after('<p>'+alt+'</p>');
+
+  });
+  $('img.image-news').each(function () {
+    alt = $(this).attr('title');
+    style = $(this).attr('style');
+    wid = $(this).width();
+    if(typeof alt !== 'undefined') {
+      if(alt[0]) {
+        if(wid>300) {
+          $(this).after('<br clear="both">');
+        }
+        //alert(wid);
+        $(this).wrap('<div class="img_title_text" style="width:'+wid+'px" />');
+        $(this).after('<p>'+alt+'</p>');
+      } }
+  });
+  $('div.field-name-field-mediatag div.field-item').each(function () {
+    $(this).prepend('#');
+  });
+
+  $('.xmpp_buddy_buttons a').click(function(){
+    $(this).attr('hidden', 'true');
+  });
+
+});
+
+
+})(jQuery);
+
+
+
+
